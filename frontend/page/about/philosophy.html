@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifesto — L'Étoile Atelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #070605;
+            --bg-glass: rgba(18, 16, 14, 0.6);
+            --border-hairline: rgba(255, 255, 255, 0.07);
+            --border-gold: rgba(197, 168, 128, 0.25);
+            --text-pure: #F7F5F0;
+            --text-muted: #8C887E;
+            --text-dim: #545149;
+            --accent-gold: #C5A880;
+            --font-editorial: 'Cormorant Garamond', Georgia, serif;
+            --font-clean: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-pure);
+            font-family: var(--font-clean);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Tối Giản Như Bảo Tàng Louvre */
+        .exhibit-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 64px;
+            background: linear-gradient(to bottom, rgba(7,6,5,0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand-monogram {
+            font-family: var(--font-editorial);
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            color: var(--text-pure);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-curated {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-curated a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 300;
+            transition: var(--transition);
+        }
+
+        .nav-curated a:hover,
+        .nav-curated a.active {
+            color: var(--accent-gold);
+        }
+
+        .btn-ticket {
+            color: var(--text-pure);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            border: 1px solid var(--border-hairline);
+            border-radius: 9999px;
+            transition: var(--transition);
+        }
+
+        .btn-ticket:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* Gallery Main Canvas */
+        .gallery-canvas {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 160px 64px 200px;
+            position: relative;
+        }
+
+        /* Header Triển Lãm */
+        .gallery-intro {
+            padding-bottom: 120px;
+            border-bottom: 1px solid var(--border-hairline);
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 80px;
+            align-items: flex-end;
+        }
+
+        .curator-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .hero-statement {
+            font-family: var(--font-editorial);
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            font-weight: 300;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-statement em {
+            font-style: italic;
+            font-family: var(--font-editorial);
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        .intro-footnote {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 200;
+            line-height: 1.9;
+            padding-left: 30px;
+            border-left: 1px solid var(--border-gold);
+        }
+
+        /* ==========================================================================
+           ASYMMETRIC EXHIBITION ROOMS (CÁC PHÒNG TRIỂN LÃM BẤT ĐỐI XỨNG)
+           ========================================================================== */
+        .exhibit-room {
+            position: relative;
+            padding: 160px 0;
+            display: grid;
+            align-items: center;
+        }
+
+        /* Tác phẩm 01: Ảnh dọc cao chót vót lệch phải, chữ treo lơ lửng bên trái */
+        .room-01 {
+            grid-template-columns: 1fr 1.2fr;
+            gap: 100px;
+        }
+
+        /* Tác phẩm 02: Ảnh nằm ngang kéo rộng mép trái, chữ nép sâu sang phải */
+        .room-02 {
+            grid-template-columns: 1.3fr 0.8fr;
+            gap: 120px;
+        }
+
+        /* Tác phẩm 03: Text chiếm trọn một góc, ảnh dọc trôi xuống sâu */
+        .room-03 {
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 80px;
+        }
+
+        /* Tác phẩm 04: Căn giữa phong cách tôn nghiêm */
+        .room-04 {
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 100px;
+        }
+
+        /* Khung tranh nghệ thuật (Art Frame) */
+        .art-frame {
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .art-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(0.85) contrast(1.1);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s;
+            display: block;
+        }
+
+        .art-frame:hover img {
+            transform: scale(1.04);
+            filter: grayscale(0%) brightness(0.95);
+        }
+
+        .frame-tall {
+            height: 640px;
+            border-radius: 4px;
+        }
+
+        .frame-landscape {
+            height: 480px;
+            border-radius: 4px;
+        }
+
+        /* Tem bảo tàng gắn góc tranh */
+        .curator-plate {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(7, 6, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-hairline);
+            padding: 10px 18px;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-pure);
+        }
+
+        /* Khối phân tích văn bản (Artwork Placard) */
+        .art-placard {
+            position: relative;
+        }
+
+        .index-num {
+            font-family: var(--font-editorial);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .art-placard h2 {
+            font-family: var(--font-editorial);
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.01em;
+        }
+
+        .art-placard h2 em {
+            font-style: italic;
+            color: var(--accent-gold);
+        }
+
+        .art-placard p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 200;
+            line-height: 2;
+            max-width: 480px;
+            margin-bottom: 32px;
+        }
+
+        /* Thông số kỹ thuật của thợ làm bánh (Baking Metrology) */
+        .baking-specs {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-hairline);
+            width: fit-content;
+        }
+
+        .spec-item span {
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .spec-item strong {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text-pure);
+            letter-spacing: 0.05em;
+        }
+
+        /* Đường chỉ hướng mảnh như tơ nhện (Curatorial Vector Line) */
+        .vector-pointer {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .vector-01 {
+            bottom: -60px;
+            right: 40%;
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, var(--accent-gold), transparent);
+        }
+
+        .vector-02 {
+            bottom: -50px;
+            left: 30%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--accent-gold);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .vector-02::before {
+            content: '';
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-gold));
+        }
+
+        /* Final Epilogue Banner */
+        .gallery-epilogue {
+            margin-top: 160px;
+            padding: 140px 40px;
+            border: 1px solid var(--border-hairline);
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at 50% 50%, rgba(197, 168, 128, 0.05) 0%, transparent 80%);
+        }
+
+        .gallery-epilogue blockquote {
+            font-family: var(--font-editorial);
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-style: italic;
+            font-weight: 300;
+            max-width: 860px;
+            margin: 0 auto 40px;
+            line-height: 1.35;
+        }
+
+        .btn-exhibit-action {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #000;
+            background: var(--text-pure);
+            padding: 16px 36px;
+            text-decoration: none;
+            border-radius: 9999px;
+            transition: var(--transition);
+        }
+
+        .btn-exhibit-action:hover {
+            background: var(--accent-gold);
+            box-shadow: 0 0 35px rgba(197, 168, 128, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 992px) {
+            .gallery-canvas { padding: 120px 24px; }
+            .gallery-intro { grid-template-columns: 1fr; gap: 40px; }
+            .exhibit-room { grid-template-columns: 1fr !important; gap: 48px; padding: 80px 0; }
+            .frame-tall, .frame-landscape { height: 400px; }
+            .vector-pointer { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Điều Hướng Kiểu Triển Lãm -->
+    <header class="exhibit-nav">
+        <a href="../home/index.html" class="brand-monogram">L'Étoile Atelier.</a>
+        <nav class="nav-curated">
+            <a href="../home/index.html#collection">Collection</a>
+            <a href="story.html">Origine</a>
+            <a href="philosophy.html" class="active">Manifesto</a>
+            <a href="../home/index.html#menu">Menu</a>
+        </nav>
+        <a href="../auth/login.html" class="btn-ticket">Member Portal</a>
+    </header>
+
+    <main class="gallery-canvas">
+        
+        <!-- Khúc Dạo Đầu Triển Lãm -->
+        <header class="gallery-intro">
+            <div>
+                <span class="curator-tag">Exhibition • Room IV : The Principles</span>
+                <h1 class="hero-statement">Điêu Khắc Bằng <br><em>Hương & Thời Gian.</em></h1>
+            </div>
+            <p class="intro-footnote">
+                Chúng tôi không tiếp cận bánh ngọt như một món tráng miệng công nghiệp ăn vội. Ở đây, mỗi chiếc bánh là một tác phẩm được gọt giũa từ 4 định đề mỹ học nghiêm ngặt nhất của nghệ thuật ẩm thực Pháp.
+            </p>
+        </header>
+
+        <!-- KHÔNG GIAN 01: BƠ AOP (Lệch cực hạn: Chữ trôi lơ lửng, ảnh dọc sừng sững) -->
+        <section class="exhibit-room room-01">
+            <div class="art-placard">
+                <span class="index-num">N° 01 — Matière Première</span>
+                <h2>Sự Thống Trị Tuyệt Đối Của <em>Bơ AOP.</em></h2>
+                <p>
+                    Từ chối 100% bơ thực vật nhân tạo và các chất béo tổng hợp. Toàn bộ bánh nướng tại xưởng được nhào nặn độc quyền từ bơ tinh khiết vùng Isigny-sur-Mer (Normandie) — nơi những đàn bò ăn cỏ ngậm sương biển tạo ra dòng sữa có độ béo tự nhiên tròn đầy và tan ngay lập tức trên đầu lưỡi ở đúng 32°C.
+                </p>
+                <div class="baking-specs">
+                    <div class="spec-item">
+                        <span>Chứng chỉ</span>
+                        <strong>AOP Normandie</strong>
+                    </div>
+                    <div class="spec-item">
+                        <span>Độ béo tự nhiên</span>
+                        <strong>82% Lipides Pur</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="art-frame frame-tall">
+                <img src="https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?q=80&w=1000&auto=format&fit=crop" alt="Bơ sữa Isigny vùng Normandy">
+                <div class="curator-plate">Mã trưng bày: NMD-82</div>
+            </div>
+
+            <!-- Đường dẫn thị giác mảnh xuống tác phẩm tiếp theo -->
+            <div class="vector-pointer vector-01"></div>
+        </section>
+
+
+        <!-- KHÔNG GIAN 02: TRÁI CÂY (Đảo ngược: Ảnh ngang choáng ngợp, chữ nép sâu sang phải) -->
+        <section class="exhibit-room room-02">
+            <div class="art-frame frame-landscape">
+                <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=1200&auto=format&fit=crop" alt="Pavlova và mâm xôi tự nhiên">
+                <div class="curator-plate">Mã trưng bày: YZU-04</div>
+            </div>
+
+            <div class="art-placard">
+                <span class="index-num">N° 02 — L'Équilibre</span>
+                <h2>Vị Ngọt Từ Quả Mọng, <br><em>Không Từ Tinh Luyện.</em></h2>
+                <p>
+                    Bánh ngọt kiểu cũ thường làm tê liệt vị giác bằng lượng đường khổng lồ. Chúng tôi giải phóng cấu trúc bánh bằng cách cắt bỏ 35% lượng đường mía tinh chế, thay thế bằng độ chua thanh tao của quýt Yuzu, mâm xôi dại thu hái từ rừng ôn đới và mật ong hoa cỏ mùa xuân.
+                </p>
+                <div class="baking-specs">
+                    <div class="spec-item">
+                        <span>Đường tinh luyện</span>
+                        <strong>-35% Réduction</strong>
+                    </div>
+                    <div class="spec-item">
+                        <span>Cân bằng acid</span>
+                        <strong>pH 4.2 Équilibré</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vector-pointer vector-02">
+                <span>Dòng chảy thời gian</span>
+            </div>
+        </section>
+
+
+        <!-- KHÔNG GIAN 03: THỜI GIAN 4:00 AM (Ảnh dọc nghệ thuật, căn chỉnh lệch trục) -->
+        <section class="exhibit-room room-03">
+            <div class="art-placard">
+                <span class="index-num">N° 03 — L'Éphémère</span>
+                <h2>Nướng Lúc 04:00 AM. <br><em>Không Bánh Qua Đêm.</em></h2>
+                <p>
+                    Thời gian là kẻ thù lớn nhất của độ giòn xốp trong bột ngàn lớp (feuilletage). Lò nướng của xưởng chỉ đỏ lửa vào rạng sáng. Mỗi mẻ bánh là một thực thể sống ngắn ngủi: chỉ hoàn hảo trong vòng 8 tiếng đầu tiên và tuyệt đối không bao giờ được phép xuất hiện lại vào ngày hôm sau.
+                </p>
+                <div class="baking-specs">
+                    <div class="spec-item">
+                        <span>Thời điểm lò mở</span>
+                        <strong>04:00 AM GMT+7</strong>
+                    </div>
+                    <div class="spec-item">
+                        <span>Vòng đời tối đa</span>
+                        <strong>8 Heures Seulement</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="art-frame frame-tall">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop" alt="Thợ nướng bánh lúc rạng sáng">
+                <div class="curator-plate">Mã trưng bày: EP-0400</div>
+            </div>
+        </section>
+
+
+        <!-- KHÔNG GIAN 04: SẮC MÀU THỰC VẬT (Khung tranh tĩnh vật đương đại) -->
+        <section class="exhibit-room room-04">
+            <div class="art-frame frame-landscape">
+                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop" alt="Socola đen Valrhona và màu thực vật">
+                <div class="curator-plate">Mã trưng bày: VAL-70</div>
+            </div>
+
+            <div class="art-placard">
+                <span class="index-num">N° 04 — Pigments Vivants</span>
+                <h2>Sắc Màu Thuần Túy Của <em>Thực Vật Học.</em></h2>
+                <p>
+                    Nói không với mọi hóa chất tạo màu công nghiệp. Gam xanh thẫm lấy từ bột trà matcha Uji nghiền đá cối, màu đỏ thắm từ chiết xuất quả dâu tây dại cô đặc, sắc đen huyền bí từ than tre Koto và socola đen Valrhona 70%. Màu sắc của chúng tôi là màu của tự nhiên.
+                </p>
+                <div class="baking-specs">
+                    <div class="spec-item">
+                        <span>Phẩm màu tổng hợp</span>
+                        <strong>0.00% Chimique</strong>
+                    </div>
+                    <div class="spec-item">
+                        <span>Nguồn gốc sắc tố</span>
+                        <strong>100% Botanique</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Kết Thúc Triển Lãm: Bản Tuyên Ngôn Nghệ Thuật -->
+        <section class="gallery-epilogue">
+            <span class="curator-tag">Final Curatorial Note</span>
+            <blockquote>
+                "Một tác phẩm ẩm thực hoàn mỹ không cố gắng làm thỏa mãn cơn đói; nó đánh thức những ký ức sâu kín nhất của giác quan."
+            </blockquote>
+            <a href="../home/index.html#collection" class="btn-exhibit-action">Chiêm Ngưỡng Tác Phẩm Bánh</a>
+        </section>
+
+    </main>
+
+</body>
+</html>

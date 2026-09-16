@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Carte — L'Étoile Atelier</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-void: #070605;
+            --bg-surface: #12100E;
+            --bg-surface-hover: #191714;
+            --border-hairline: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(197, 168, 128, 0.25);
+            --text-pure: #F7F5F0;
+            --text-muted: #8C887E;
+            --text-dim: #545149;
+            --accent-gold: #C5A880;
+            --font-editorial: 'Cormorant Garamond', Georgia, serif;
+            --font-clean: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-pure);
+            font-family: var(--font-clean);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .exhibit-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 64px;
+            background: linear-gradient(to bottom, rgba(7, 6, 5, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-hairline);
+        }
+
+        .brand-monogram {
+            font-family: var(--font-editorial);
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            color: var(--text-pure);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-curated {
+            display: flex;
+            gap: 36px;
+        }
+
+        .nav-curated a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 300;
+            transition: var(--transition);
+        }
+
+        .nav-curated a:hover,
+        .nav-curated a.active {
+            color: var(--accent-gold);
+        }
+
+        .cart-indicator {
+            color: var(--text-pure);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border: 1px solid var(--border-hairline);
+            border-radius: 9999px;
+            transition: var(--transition);
+        }
+
+        .cart-indicator:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* Menu Canvas */
+        .menu-canvas {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 160px 48px 160px;
+        }
+
+        /* Header Intro */
+        .menu-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border-hairline);
+            margin-bottom: 50px;
+        }
+
+        .curator-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .menu-title {
+            font-family: var(--font-editorial);
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 300;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .menu-title em {
+            font-style: italic;
+            color: var(--accent-gold);
+        }
+
+        .menu-note {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            max-width: 380px;
+            font-weight: 200;
+            line-height: 1.8;
+            text-align: right;
+        }
+
+        /* Category Filter Tabs */
+        .filter-shelf {
+            display: flex;
+            gap: 28px;
+            margin-bottom: 70px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+        }
+
+        .filter-shelf button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-clean);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding-bottom: 6px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .filter-shelf button.active,
+        .filter-shelf button:hover {
+            color: var(--text-pure);
+        }
+
+        .filter-shelf button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent-gold);
+        }
+
+        /* Asymmetrical Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px 36px;
+        }
+
+        /* Item thẻ bánh */
+        .menu-exhibit-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        /* Tác phẩm so le (Item chẵn lệch nhẹ xuống dưới tạo nhịp điệu) */
+        .menu-exhibit-item.offset-down {
+            margin-top: 40px;
+        }
+
+        .exhibit-frame {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            background: #000;
+            overflow: hidden;
+            border: 1px solid var(--border-hairline);
+            margin-bottom: 24px;
+        }
+
+        .exhibit-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.85) contrast(1.05);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+        }
+
+        .menu-exhibit-item:hover .exhibit-frame img {
+            transform: scale(1.05);
+            filter: brightness(0.95);
+        }
+
+        .exhibit-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            background: rgba(7, 6, 5, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 4px 10px;
+            border: 1px solid var(--border-hairline);
+        }
+
+        /* Thuyết minh bánh */
+        .exhibit-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .exhibit-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .exhibit-name {
+            font-family: var(--font-editorial);
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--text-pure);
+            letter-spacing: -0.01em;
+        }
+
+        .exhibit-price {
+            font-family: var(--font-clean);
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: var(--accent-gold);
+            letter-spacing: 0.05em;
+        }
+
+        .exhibit-materials {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 200;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .exhibit-action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-hairline);
+        }
+
+        .batch-indicator {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .btn-order-craft {
+            background: transparent;
+            border: 1px solid var(--border-hairline);
+            color: var(--text-pure);
+            font-family: var(--font-clean);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-order-craft:hover {
+            background: var(--text-pure);
+            color: #000;
+            border-color: var(--text-pure);
+        }
+
+        /* Mobile Layout */
+        @media (max-width: 992px) {
+            .exhibit-nav {
+                padding: 18px 24px;
+            }
+
+            .menu-canvas {
+                padding: 120px 24px 80px;
+            }
+
+            .menu-hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .menu-note {
+                text-align: left;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .menu-exhibit-item.offset-down {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header class="exhibit-nav">
+        <a href="index.html" class="brand-monogram">L'Étoile Atelier.</a>
+        <nav class="nav-curated">
+            <a href="index.html#collection">Collection</a>
+            <a href="../about/story.html">Origine</a>
+            <a href="../about/philosophy.html">Manifesto</a>
+            <a href="menu.html" class="active">La Carte</a>
+        </nav>
+        <a href="../cart/cart.html" class="cart-indicator">Panier (0)</a>
+    </header>
+
+    <main class="menu-canvas">
+
+        <!-- Menu Header -->
+        <div class="menu-hero">
+            <div>
+                <span class="curator-tag">Contemporary Catalog • Autumn / Winter</span>
+                <h1 class="menu-title">Tuyển Tập <em>Mỹ Vị.</em></h1>
+            </div>
+            <p class="menu-note">
+                Mỗi mẻ bánh được chế tác giới hạn mỗi sáng từ bơ AOP Normandie và nguyên liệu theo mùa. Vui lòng đặt
+                trước cho các mẫu bánh entremet nguyên ổ.
+            </p>
+        </div>
+
+        <!-- Shelf Filter Tabs -->
+        <nav class="filter-shelf">
+            <button class="active" onclick="filterCategory('all', this)">Toàn Bộ Tác Phẩm</button>
+            <button onclick="filterCategory('entremet', this)">Entremets & Gâteaux</button>
+            <button onclick="filterCategory('tart', this)">Tartelettes Nghệ Thuật</button>
+            <button onclick="filterCategory('viennoiserie', this)">Viennoiserie Nướng Sớm</button>
+            <button onclick="filterCategory('tea', this)">Trà Hoa & Cà Phê Mộc</button>
+        </nav>
+
+        <!-- Dynamic Menu Grid -->
+        <section class="menu-grid">
+
+            <!-- Item 01: Entremet -->
+            <article class="menu-exhibit-item" data-category="entremet">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop"
+                        alt="Noir Ganache Royale">
+                    <span class="exhibit-badge">N° 01 • Signature</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Noir Ganache Royale</h2>
+                        <span class="exhibit-price">480.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Chocolate Valrhona Guanaja 70%, mâm xôi đen hoang dã, cốt bạt biscuit
+                        dẻo & bụi vàng 24K nguyên chất.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Còn 8 ổ hôm nay</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Item 02: Pavlova (So le lệch xuống) -->
+            <article class="menu-exhibit-item offset-down" data-category="entremet">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop"
+                        alt="Pavlova Nuage Blanc"> <span class="exhibit-badge">N° 02 • Limited</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Pavlova Nuage Blanc</h2>
+                        <span class="exhibit-price">390.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Vỏ meringue sấy giòn xốp, kem chantilly vani Bourbon Madagascar, cam
+                        Yuzu Nhật Bản và quả mọng rừng.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Còn 5 phần</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Item 03: Tart -->
+            <article class="menu-exhibit-item" data-category="tart">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800&auto=format&fit=crop"
+                        alt="Tartelette Mâm Xôi">
+                    <span class="exhibit-badge">N° 03 • Seasonal</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Tartelette aux Framboises</h2>
+                        <span class="exhibit-price">220.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Đế tart bơ bột hạnh nhân giòn rụm, mứt mâm xôi hạt nấu thủ công, kem
+                        hạnh nhân Frangipane nướng thơm.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Mẻ sáng tươi mới</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Item 04: Viennoiserie (Croissant) -->
+            <article class="menu-exhibit-item" data-category="viennoiserie">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop"
+                        alt="Croissant Bơ Isigny">
+                    <span class="exhibit-badge">N° 04 • Pure Butter</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Croissant Isigny AOP</h2>
+                        <span class="exhibit-price">75.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Cán ngàn lớp bằng bơ Isigny AOP 82% béo, ủ men chậm 24 giờ, nướng phồng
+                        giòn rụm lúc 04:00 sáng mỗi ngày.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Nướng mẻ 04:00 AM</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Item 05: Brioche (Lệch xuống) -->
+            <article class="menu-exhibit-item offset-down" data-category="viennoiserie">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop"
+                        alt="Pain au Chocolat">
+                    <span class="exhibit-badge">N° 05 • Classic</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Pain au Chocolat Gianduja</h2>
+                        <span class="exhibit-price">85.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Hai thanh socola đen Valrhona cuộn bên trong lớp bơ ngàn lớp thơm ngậy
+                        và hạt phỉ rang đập vỡ.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Nướng mẻ 04:00 AM</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Item 06: Trà Thượng Hạng -->
+            <article class="menu-exhibit-item" data-category="tea">
+                <div class="exhibit-frame">
+                    <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=800&auto=format&fit=crop"
+                        alt="Trà hoa hồng Pháp">
+                    <span class="exhibit-badge">N° 06 • Infusion</span>
+                </div>
+                <div class="exhibit-info">
+                    <div class="exhibit-header-row">
+                        <h2 class="exhibit-name">Thé Rose du Petit Prince</h2>
+                        <span class="exhibit-price">140.000 đ</span>
+                    </div>
+                    <p class="exhibit-materials">Trà đen Ceylon hảo hạng hòa cùng nụ hoa hồng khô Grasse, tinh dầu cam
+                        Bergamot và cánh cúc kim tiền.</p>
+                    <div class="exhibit-action-row">
+                        <span class="batch-indicator">Pha ấm phục vụ tại chỗ</span>
+                        <button class="btn-order-craft">Thưởng Thức</button>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+    </main>
+
+    <!-- Script Bộ Lọc Danh Mục Mượt Mà -->
+    <script>
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-shelf button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const items = document.querySelectorAll('.menu-exhibit-item');
+            items.forEach(item => {
+                if (cat === 'all' || item.getAttribute('data-category') === cat) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

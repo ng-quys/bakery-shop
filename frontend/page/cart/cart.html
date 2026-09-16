@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier Privé — L'Étoile Atelier</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-void: #070605;
+            --bg-surface: #12100E;
+            --border-hairline: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(197, 168, 128, 0.25);
+            --text-pure: #F7F5F0;
+            --text-muted: #8C887E;
+            --text-dim: #545149;
+            --accent-gold: #C5A880;
+            --font-editorial: 'Cormorant Garamond', Georgia, serif;
+            --font-clean: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-pure);
+            font-family: var(--font-clean);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .exhibit-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 64px;
+            background: rgba(7, 6, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-hairline);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-monogram {
+            font-family: var(--font-editorial);
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            color: var(--text-pure);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Cart Main Layout */
+        .cart-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 80px 48px 120px;
+        }
+
+        .cart-header {
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-hairline);
+        }
+
+        .curator-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .cart-title {
+            font-family: var(--font-editorial);
+            font-size: clamp(2.8rem, 4.5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        .cart-title em {
+            font-style: italic;
+            color: var(--accent-gold);
+        }
+
+        /* Layout 2 Cột */
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 64px;
+            align-items: start;
+        }
+
+        /* Cột trái: Danh sách bánh */
+        .cart-items-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 28px;
+            padding: 32px 0;
+            border-bottom: 1px solid var(--border-hairline);
+            align-items: center;
+        }
+
+        .item-thumb {
+            width: 100px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-hairline);
+        }
+
+        .item-details h3 {
+            font-family: var(--font-editorial);
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+
+        .item-spec {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .item-unit-price {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+        }
+
+        /* Bộ nút số lượng */
+        .item-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-hairline);
+            border-radius: 9999px;
+            padding: 4px 12px;
+            gap: 14px;
+        }
+
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            color: var(--text-pure);
+        }
+
+        .qty-val {
+            font-size: 0.85rem;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .item-total-price {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-pure);
+        }
+
+        .btn-remove {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-remove:hover {
+            color: #d9534f;
+        }
+
+        /* Cột phải: Summary & Checkout */
+        .cart-summary-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-hairline);
+            border-radius: 4px;
+            padding: 40px 36px;
+            position: sticky;
+            top: 110px;
+        }
+
+        .summary-heading {
+            font-family: var(--font-editorial);
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-hairline);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .summary-row.total {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-hairline);
+            color: var(--text-pure);
+            font-size: 1.1rem;
+        }
+
+        .summary-row.total strong {
+            font-family: var(--font-editorial);
+            font-size: 1.7rem;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Note đặc biệt cho bếp */
+        .preorder-note {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preorder-note label {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .preorder-note textarea {
+            background: var(--bg-void);
+            border: 1px solid var(--border-hairline);
+            border-radius: 4px;
+            padding: 10px 14px;
+            color: var(--text-pure);
+            font-family: var(--font-clean);
+            font-size: 0.8rem;
+            resize: none;
+            height: 75px;
+            outline: none;
+        }
+
+        .preorder-note textarea:focus {
+            border-color: var(--border-gold);
+        }
+
+        /* Checkout button */
+        .btn-checkout {
+            margin-top: 28px;
+            width: 100%;
+            background: var(--text-pure);
+            color: #000;
+            border: none;
+            border-radius: 9999px;
+            padding: 16px;
+            font-family: var(--font-clean);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-checkout:hover {
+            background: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(197, 168, 128, 0.25);
+        }
+
+        @media (max-width: 900px) {
+            .exhibit-nav {
+                padding: 18px 24px;
+            }
+
+            .cart-container {
+                padding: 40px 24px;
+            }
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .item-controls {
+                grid-column: span 2;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        /* Payment Selector */
+        .payment-selector {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .pay-option {
+            border: 1px solid var(--border-hairline);
+            border-radius: 6px;
+            padding: 12px 14px;
+            background: var(--bg-void);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pay-option input[type="radio"] {
+            accent-color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .pay-option span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .pay-option.active,
+        .pay-option:hover {
+            border-color: var(--border-gold);
+        }
+
+        .pay-option.active span {
+            color: var(--text-pure);
+        }
+
+        /* Khung chi tiết Chuyển Khoản QR mờ ảo */
+        .transfer-details {
+            display: none;
+            margin-top: 12px;
+            padding: 16px;
+            background: rgba(197, 168, 128, 0.04);
+            border: 1px dashed var(--border-gold);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .transfer-details.show {
+            display: block;
+        }
+
+        .transfer-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .transfer-row strong {
+            color: var(--accent-gold);
+            font-weight: 400;
+            letter-spacing: 0.03em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header class="exhibit-nav">
+        <a href="../home/index.html" class="brand-monogram">L'Étoile Atelier.</a>
+        <a href="../menu/menu.html" class="back-link">
+            <span>←</span> Tiếp tục chọn bánh
+        </a>
+    </header>
+
+    <main class="cart-container">
+
+        <header class="cart-header">
+            <span class="curator-tag">Votre Sélection Privée</span>
+            <h1 class="cart-title">Giỏ Bánh <em>Của Bạn.</em></h1>
+        </header>
+
+        <div class="cart-layout">
+
+            <!-- Danh sách các tác phẩm bánh đã chọn -->
+            <div class="cart-items-list" id="cart-list">
+
+                <!-- Món 1 -->
+                <article class="cart-item" data-price="480000">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=300&auto=format&fit=crop"
+                        alt="Noir Ganache Royale" class="item-thumb">
+                    <div class="item-details">
+                        <h3>Noir Ganache Royale</h3>
+                        <p class="item-spec">Valrhona 70% • Mâm xôi rừng • Bụi vàng 24K</p>
+                        <span class="item-unit-price">480.000 đ</span>
+                    </div>
+                    <div class="item-controls">
+                        <div class="qty-box">
+                            <button class="qty-btn" onclick="updateQty(this, -1)">−</button>
+                            <span class="qty-val">1</span>
+                            <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                        </div>
+                        <span class="item-total-price">480.000 đ</span>
+                        <button class="btn-remove" onclick="removeItem(this)">Xóa</button>
+                    </div>
+                </article>
+
+                <!-- Món 2 -->
+                <article class="cart-item" data-price="75000">
+                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=300&auto=format&fit=crop"
+                        alt="Croissant Isigny" class="item-thumb">
+                    <div class="item-details">
+                        <h3>Croissant Isigny AOP</h3>
+                        <p class="item-spec">Bơ tươi Normandie • Nướng mẻ 04:00 AM</p>
+                        <span class="item-unit-price">75.000 đ</span>
+                    </div>
+                    <div class="item-controls">
+                        <div class="qty-box">
+                            <button class="qty-btn" onclick="updateQty(this, -1)">−</button>
+                            <span class="qty-val">2</span>
+                            <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                        </div>
+                        <span class="item-total-price">150.000 đ</span>
+                        <button class="btn-remove" onclick="removeItem(this)">Xóa</button>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Bảng tính thành tiền & Ghi chú cho xưởng -->
+            <aside class="cart-summary-panel">
+                <h2 class="summary-heading">Tổng Kết Đơn Bánh</h2>
+
+                <div class="summary-row">
+                    <span>Tạm tính</span>
+                    <span id="subtotal-val">630.000 đ</span>
+                </div>
+                <div class="summary-row">
+                    <span>Phí bảo quản nhiệt & Hộp</span>
+                    <span>Đặc quyền miễn phí</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Tổng cộng</span>
+                    <strong id="final-total">630.000 đ</strong>
+                </div>
+
+                <div class="preorder-note">
+                    <label for="kitchen-note">Ghi chú cho bếp (Viết thiệp, giờ giao)</label>
+                    <textarea id="kitchen-note"
+                        placeholder="Ví dụ: Ghi chữ chúc mừng sinh nhật trên đế bánh, giao trước 10h sáng..."></textarea>
+                </div>
+
+                <!-- Phương thức thanh toán -->
+                <div class="payment-selector">
+                    <span class="section-label">Phương Thức Thanh Toán</span>
+                    <div class="payment-options">
+                        <label class="pay-option active" id="opt-transfer">
+                            <input type="radio" name="payment_method" value="transfer" checked
+                                onchange="togglePayment('transfer')">
+                            <span>Chuyển khoản QR</span>
+                        </label>
+                        <label class="pay-option" id="opt-cod">
+                            <input type="radio" name="payment_method" value="cod" onchange="togglePayment('cod')">
+                            <span>Tiền mặt khi nhận</span>
+                        </label>
+                    </div>
+
+                    <!-- Hộp thông tin chuyển khoản (Ẩn khi chọn tiền mặt) -->
+                    <div class="transfer-details show" id="transfer-info">
+                        <div class="transfer-row">
+                            <span>Ngân hàng</span>
+                            <strong>Vietcombank</strong>
+                        </div>
+                        <div class="transfer-row">
+                            <span>Số tài khoản</span>
+                            <strong>9876 5432 1000</strong>
+                        </div>
+                        <div class="transfer-row">
+                            <span>Chủ tài khoản</span>
+                            <strong>L'ETOILE ATELIER</strong>
+                        </div>
+                        <div class="transfer-row">
+                            <span>Nội dung CK</span>
+                            <strong id="transfer-memo">LETOILE + SĐT của bạn</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-checkout" onclick="alert('Đang kết nối cổng thanh toán an toàn...')">
+                    Xác Nhận Đặt Bánh
+                </button>
+            </aside>
+
+        </div>
+
+    </main>
+
+    <!-- Script tính giá động trực tiếp -->
+    <script>
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount) + ' đ';
+        }
+
+        function updateTotals() {
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseInt(item.getAttribute('data-price'));
+                const qty = parseInt(item.querySelector('.qty-val').innerText);
+                const itemTotal = price * qty;
+                item.querySelector('.item-total-price').innerText = formatVND(itemTotal);
+                total += itemTotal;
+            });
+            document.getElementById('subtotal-val').innerText = formatVND(total);
+            document.getElementById('final-total').innerText = formatVND(total);
+        }
+
+        function updateQty(btn, delta) {
+            const qtySpan = btn.parentElement.querySelector('.qty-val');
+            let currentQty = parseInt(qtySpan.innerText) + delta;
+            if (currentQty >= 1) {
+                qtySpan.innerText = currentQty;
+                updateTotals();
+            }
+        }
+
+        function removeItem(btn) {
+            const row = btn.closest('.cart-item');
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(-20px)';
+            setTimeout(() => {
+                row.remove();
+                updateTotals();
+            }, 300);
+        }
+        function togglePayment(mode) {
+            const infoBox = document.getElementById('transfer-info');
+            const optTransfer = document.getElementById('opt-transfer');
+            const optCod = document.getElementById('opt-cod');
+
+            if (mode === 'transfer') {
+                infoBox.classList.add('show');
+                optTransfer.classList.add('active');
+                optCod.classList.remove('active');
+            } else {
+                infoBox.classList.remove('show');
+                optCod.classList.add('active');
+                optTransfer.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
