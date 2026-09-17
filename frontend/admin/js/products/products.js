@@ -62,7 +62,6 @@ page.innerHTML = `
     </div>
 
 
-    <!-- FILTER -->
     <div class="toolbar">
 
         <input
@@ -107,7 +106,6 @@ page.innerHTML = `
     </div>
 
 
-    <!-- TABLE -->
     <div class="table-wrap">
 
         <table>
@@ -150,9 +148,7 @@ page.innerHTML = `
 
 
 
-<!-- =====================================================
-     PRODUCT MODAL
-===================================================== -->
+<!-- PRODUCT MODAL -->
 
 <div
     class="modal hidden"
@@ -199,7 +195,6 @@ page.innerHTML = `
             <div class="form-grid">
 
 
-                <!-- MÃ SP -->
                 <div class="form-group">
 
                     <label for="MaSP">
@@ -216,7 +211,6 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- TÊN SP -->
                 <div class="form-group">
 
                     <label for="TenSP">
@@ -233,7 +227,6 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- DANH MỤC -->
                 <div class="form-group">
 
                     <label for="MaDM">
@@ -254,7 +247,6 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- SỐ LƯỢNG -->
                 <div class="form-group">
 
                     <label for="SoLuong">
@@ -271,7 +263,6 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- TRẠNG THÁI -->
                 <div class="form-group">
 
                     <label for="TrangThai">
@@ -293,23 +284,37 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- HÌNH ẢNH -->
-                <div class="form-group">
+                <div class="form-group full">
 
                     <label for="HinhAnh">
-                        URL hình ảnh
+                        Hình ảnh sản phẩm
                     </label>
 
                     <input
                         id="HinhAnh"
-                        type="text"
-                        placeholder="https://..."
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        multiple
                     >
+
+                    <small class="field-hint">
+                        Có thể chọn nhiều ảnh cùng lúc.
+                        Khi sửa, nếu không chọn ảnh mới thì ảnh cũ sẽ được giữ nguyên.
+                    </small>
+
+                    <div
+                        id="currentImages"
+                        class="image-preview"
+                    ></div>
+
+                    <div
+                        id="imagePreview"
+                        class="image-preview"
+                    ></div>
 
                 </div>
 
 
-                <!-- MÔ TẢ -->
                 <div class="form-group full">
 
                     <label for="MoTa">
@@ -325,7 +330,6 @@ page.innerHTML = `
                 </div>
 
 
-                <!-- KÍCH THƯỚC / GIÁ -->
                 <div class="form-group full">
 
                     <label>
@@ -386,9 +390,7 @@ page.innerHTML = `
 
 
 
-<!-- =====================================================
-     DELETE MODAL
-===================================================== -->
+<!-- DELETE MODAL -->
 
 <div
     class="modal hidden"
@@ -453,7 +455,6 @@ page.innerHTML = `
 </div>
 
 
-
 <div
     id="adminToast"
     class="admin-toast hidden"
@@ -486,8 +487,25 @@ const saveBtn =
 const sizeList =
     document.getElementById('sizeList');
 
+const imageInput =
+    document.getElementById('HinhAnh');
+
+const imagePreview =
+    document.getElementById('imagePreview');
+
+const currentImages =
+    document.getElementById('currentImages');
+
 
 let productToDelete = null;
+
+
+/* =====================================================
+   API BASE
+===================================================== */
+
+const API_BASE =
+    'http://localhost:8000/api';
 
 
 /* =====================================================
@@ -702,7 +720,7 @@ async function loadProducts() {
 
 
 /* =====================================================
-   RENDER SIZE
+   RENDER SIZE PRICE
 ===================================================== */
 
 function renderSizePrice(
@@ -722,26 +740,14 @@ function renderSizePrice(
 
     return sizes
         .map(
-            item => {
+            item => `
 
-                return `
-                    <div>
-                        ${
-                            esc(
-                                item.Ten
-                                ?? ''
-                            )
-                        }:
-                        ${
-                            money(
-                                item.Gia
-                                ?? 0
-                            )
-                        }
-                    </div>
-                `;
+                <div>
+                    ${esc(item.Ten ?? '')}:
+                    ${money(item.Gia ?? 0)}
+                </div>
 
-            }
+            `
         )
         .join('');
 
@@ -956,10 +962,8 @@ function getSizes() {
 
 
             return {
-                Ten:
-                    name,
-                Gia:
-                    price
+                Ten: name,
+                Gia: price
             };
 
         }
@@ -967,6 +971,98 @@ function getSizes() {
     .filter(
         item =>
             item.Ten !== ''
+    );
+
+}
+
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+imageInput.addEventListener(
+    'change',
+    () => {
+
+        imagePreview.innerHTML = '';
+
+
+        const files =
+            [...imageInput.files];
+
+
+        files.forEach(
+            file => {
+
+                const url =
+                    URL.createObjectURL(
+                        file
+                    );
+
+
+                imagePreview.insertAdjacentHTML(
+                    'beforeend',
+                    `
+                    <img
+                        src="${url}"
+                        alt=""
+                        class="preview-image"
+                    >
+                    `
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SHOW CURRENT IMAGES
+===================================================== */
+
+function renderCurrentImages(
+    images = []
+) {
+
+    currentImages.innerHTML = '';
+
+
+    if (
+        !Array.isArray(images)
+        ||
+        !images.length
+    ) {
+
+        return;
+
+    }
+
+
+    images.forEach(
+        image => {
+
+            currentImages.insertAdjacentHTML(
+                'beforeend',
+                `
+                <div class="current-image-item">
+
+                    <img
+                        src="http://localhost:8000/uploads/products/${encodeURIComponent(image)}"
+                        class="preview-image"
+                        alt=""
+                    >
+
+                    <small>
+                        ${esc(image)}
+                    </small>
+
+                </div>
+                `
+            );
+
+        }
     );
 
 }
@@ -1027,6 +1123,14 @@ function openCreateProduct() {
         '';
 
 
+    imagePreview.innerHTML =
+        '';
+
+
+    currentImages.innerHTML =
+        '';
+
+
     addSizeRow(
         'Nhỏ',
         ''
@@ -1076,6 +1180,10 @@ async function openEditProduct(
         productForm.reset();
 
 
+        imagePreview.innerHTML =
+            '';
+
+
         document
             .getElementById(
                 'productMode'
@@ -1093,10 +1201,9 @@ async function openEditProduct(
 
 
         const codeInput =
-            document
-                .getElementById(
-                    'MaSP'
-                );
+            document.getElementById(
+                'MaSP'
+            );
 
 
         codeInput.value =
@@ -1146,20 +1253,17 @@ async function openEditProduct(
 
         document
             .getElementById(
-                'HinhAnh'
-            )
-            .value =
-                item.HinhAnh
-                ?? '';
-
-
-        document
-            .getElementById(
                 'MoTa'
             )
             .value =
                 item.MoTa
                 ?? '';
+
+
+        renderCurrentImages(
+            item.HinhAnh
+            ?? []
+        );
 
 
         sizeList.innerHTML =
@@ -1223,7 +1327,7 @@ async function openEditProduct(
 
 
 /* =====================================================
-   CLOSE
+   CLOSE MODAL
 ===================================================== */
 
 function closeProductModal() {
@@ -1238,149 +1342,86 @@ function closeProductModal() {
 
 
 /* =====================================================
-   PAYLOAD
-===================================================== */
-
-function getProductPayload() {
-
-    return {
-
-        MaSP:
-            document
-                .getElementById(
-                    'MaSP'
-                )
-                .value
-                .trim()
-                .toUpperCase(),
-
-        TenSP:
-            document
-                .getElementById(
-                    'TenSP'
-                )
-                .value
-                .trim(),
-
-        MaDM:
-            document
-                .getElementById(
-                    'MaDM'
-                )
-                .value,
-
-        SoLuong:
-            Number(
-                document
-                    .getElementById(
-                        'SoLuong'
-                    )
-                    .value
-                || 0
-            ),
-
-        TrangThai:
-            document
-                .getElementById(
-                    'TrangThai'
-                )
-                .value,
-
-        HinhAnh:
-            document
-                .getElementById(
-                    'HinhAnh'
-                )
-                .value
-                .trim(),
-
-        MoTa:
-            document
-                .getElementById(
-                    'MoTa'
-                )
-                .value
-                .trim(),
-
-        KichThuoc:
-            getSizes()
-
-    };
-
-}
-
-
-/* =====================================================
    VALIDATE
 ===================================================== */
 
-function validateProduct(
-    payload
-) {
+function validateProduct() {
 
-    if (!payload.MaSP) {
+    const code =
+        document
+            .getElementById(
+                'MaSP'
+            )
+            .value
+            .trim();
 
-        return (
-            'Vui lòng nhập mã sản phẩm.'
+
+    const name =
+        document
+            .getElementById(
+                'TenSP'
+            )
+            .value
+            .trim();
+
+
+    const category =
+        document
+            .getElementById(
+                'MaDM'
+            )
+            .value;
+
+
+    const stock =
+        Number(
+            document
+                .getElementById(
+                    'SoLuong'
+                )
+                .value
+            || 0
         );
 
+
+    const sizes =
+        getSizes();
+
+
+    if (!code) {
+        return 'Vui lòng nhập mã sản phẩm.';
     }
 
 
-    if (!payload.TenSP) {
-
-        return (
-            'Vui lòng nhập tên sản phẩm.'
-        );
-
+    if (!name) {
+        return 'Vui lòng nhập tên sản phẩm.';
     }
 
 
-    if (!payload.MaDM) {
-
-        return (
-            'Vui lòng chọn danh mục.'
-        );
-
+    if (!category) {
+        return 'Vui lòng chọn danh mục.';
     }
 
 
-    if (
-        payload.SoLuong < 0
-    ) {
-
-        return (
-            'Tồn kho không được âm.'
-        );
-
+    if (stock < 0) {
+        return 'Tồn kho không được âm.';
     }
 
 
-    if (
-        !payload.KichThuoc.length
-    ) {
-
-        return (
-            'Vui lòng thêm ít nhất một kích thước.'
-        );
-
+    if (!sizes.length) {
+        return 'Vui lòng thêm ít nhất một kích thước.';
     }
 
 
-    const invalidSize =
-        payload.KichThuoc
-            .some(
-                item =>
-                    item.Gia < 0
-            );
-
-
-    if (invalidSize) {
-
-        return (
-            'Giá sản phẩm không được âm.'
+    const invalidPrice =
+        sizes.some(
+            item =>
+                item.Gia < 0
         );
 
+
+    if (invalidPrice) {
+        return 'Giá sản phẩm không được âm.';
     }
 
 
@@ -1390,158 +1431,318 @@ function validateProduct(
 
 
 /* =====================================================
-   SUBMIT
+   BUILD FORM DATA
 ===================================================== */
 
-productForm
-    .addEventListener(
-        'submit',
-        async event => {
+function buildProductFormData() {
 
-            event.preventDefault();
+    const formData =
+        new FormData();
 
 
-            const mode =
-                document
-                    .getElementById(
-                        'productMode'
-                    )
-                    .value;
+    formData.append(
+        'MaSP',
+        document
+            .getElementById(
+                'MaSP'
+            )
+            .value
+            .trim()
+            .toUpperCase()
+    );
 
 
-            const payload =
-                getProductPayload();
+    formData.append(
+        'TenSP',
+        document
+            .getElementById(
+                'TenSP'
+            )
+            .value
+            .trim()
+    );
 
 
-            const validationError =
-                validateProduct(
-                    payload
-                );
+    formData.append(
+        'MaDM',
+        document
+            .getElementById(
+                'MaDM'
+            )
+            .value
+    );
+
+
+    formData.append(
+        'SoLuong',
+        document
+            .getElementById(
+                'SoLuong'
+            )
+            .value
+    );
+
+
+    formData.append(
+        'TrangThai',
+        document
+            .getElementById(
+                'TrangThai'
+            )
+            .value
+    );
+
+
+    formData.append(
+        'MoTa',
+        document
+            .getElementById(
+                'MoTa'
+            )
+            .value
+            .trim()
+    );
+
+
+    formData.append(
+        'KichThuoc',
+        JSON.stringify(
+            getSizes()
+        )
+    );
+
+
+    const files =
+        imageInput.files;
+
+
+    for (
+        let i = 0;
+        i < files.length;
+        i++
+    ) {
+
+        formData.append(
+            'HinhAnh[]',
+            files[i]
+        );
+
+    }
+
+
+    return formData;
+
+}
+
+
+/* =====================================================
+   PARSE RESPONSE
+===================================================== */
+
+async function parseApiResponse(
+    response
+) {
+
+    const text =
+        await response.text();
+
+
+    let result = null;
+
+
+    try {
+
+        result =
+            text
+                ? JSON.parse(text)
+                : {};
+
+    }
+    catch {
+
+        throw new Error(
+            text
+            || 'Server trả về dữ liệu không hợp lệ.'
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            result?.message
+            || 'API xảy ra lỗi.'
+        );
+
+    }
+
+
+    if (
+        result?.success === false
+    ) {
+
+        throw new Error(
+            result?.message
+            || 'API xảy ra lỗi.'
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =====================================================
+   SUBMIT CREATE / UPDATE
+===================================================== */
+
+productForm.addEventListener(
+    'submit',
+    async event => {
+
+        event.preventDefault();
+
+
+        const validationError =
+            validateProduct();
+
+
+        if (
+            validationError
+        ) {
+
+            showFormError(
+                validationError
+            );
+
+            return;
+
+        }
+
+
+        const mode =
+            document
+                .getElementById(
+                    'productMode'
+                )
+                .value;
+
+
+        const code =
+            document
+                .getElementById(
+                    'MaSP'
+                )
+                .value
+                .trim()
+                .toUpperCase();
+
+
+        const formData =
+            buildProductFormData();
+
+
+        try {
+
+            saveBtn.disabled =
+                true;
+
+
+            saveBtn.textContent =
+                'Đang lưu...';
+
+
+            let response;
 
 
             if (
-                validationError
+                mode === 'create'
             ) {
 
-                showFormError(
-                    validationError
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                saveBtn.disabled =
-                    true;
-
-
-                saveBtn.textContent =
-                    'Đang lưu...';
-
-
-                /* CREATE */
-
-                if (
-                    mode ===
-                    'create'
-                ) {
-
-                    await request(
-                        '/admin/products',
+                response =
+                    await fetch(
+                        `${API_BASE}/admin/products`,
                         {
                             method:
                                 'POST',
 
                             body:
-                                JSON.stringify(
-                                    payload
-                                )
+                                formData
                         }
                     );
 
+            }
+            else {
 
-                    showToast(
-                        'Thêm sản phẩm thành công.'
-                    );
-
-                }
-
-
-                /* UPDATE */
-
-                else {
-
-                    const code =
-                        document
-                            .getElementById(
-                                'MaSP'
-                            )
-                            .value;
-
-
-                    delete payload.MaSP;
-
-
-                    await request(
-                        `/admin/products/${
-                            encodeURIComponent(
-                                code
-                            )
-                        }`,
+                /*
+                 * PHP native không xử lý $_FILES
+                 * tiện với PUT multipart.
+                 *
+                 * Vì vậy update upload ảnh
+                 * nên POST vào route update riêng.
+                 */
+                response =
+                    await fetch(
+                        `${API_BASE}/admin/products/${encodeURIComponent(code)}`,
                         {
                             method:
-                                'PUT',
+                                'POST',
 
                             body:
-                                JSON.stringify(
-                                    payload
-                                )
+                                formData
                         }
                     );
 
-
-                    showToast(
-                        'Cập nhật sản phẩm thành công.'
-                    );
-
-                }
-
-
-                closeProductModal();
-
-
-                await loadProducts();
-
             }
-            catch (error) {
-
-                console.error(
-                    error
-                );
 
 
-                showFormError(
-                    error.message
-                    || 'Không thể lưu sản phẩm.'
-                );
-
-            }
-            finally {
-
-                saveBtn.disabled =
-                    false;
+            await parseApiResponse(
+                response
+            );
 
 
-                saveBtn.textContent =
-                    'Lưu sản phẩm';
+            closeProductModal();
 
-            }
+
+            showToast(
+                mode === 'create'
+                    ? 'Thêm sản phẩm thành công.'
+                    : 'Cập nhật sản phẩm thành công.'
+            );
+
+
+            await loadProducts();
 
         }
-    );
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            showFormError(
+                error.message
+                || 'Không thể lưu sản phẩm.'
+            );
+
+        }
+        finally {
+
+            saveBtn.disabled =
+                false;
+
+
+            saveBtn.textContent =
+                'Lưu sản phẩm';
+
+        }
+
+    }
+);
 
 
 /* =====================================================
@@ -1677,7 +1878,7 @@ document
 
 
 /* =====================================================
-   ERROR
+   FORM ERROR
 ===================================================== */
 
 function showFormError(
@@ -1706,10 +1907,9 @@ function showToast(
 ) {
 
     const toast =
-        document
-            .getElementById(
-                'adminToast'
-            );
+        document.getElementById(
+            'adminToast'
+        );
 
 
     toast.textContent =
@@ -1752,17 +1952,16 @@ function bindRowEvents() {
         .forEach(
             button => {
 
-                button
-                    .addEventListener(
-                        'click',
-                        () => {
+                button.addEventListener(
+                    'click',
+                    () => {
 
-                            openEditProduct(
-                                button.dataset.code
-                            );
+                        openEditProduct(
+                            button.dataset.code
+                        );
 
-                        }
-                    );
+                    }
+                );
 
             }
         );
@@ -1775,18 +1974,17 @@ function bindRowEvents() {
         .forEach(
             button => {
 
-                button
-                    .addEventListener(
-                        'click',
-                        () => {
+                button.addEventListener(
+                    'click',
+                    () => {
 
-                            openDeleteProduct(
-                                button.dataset.code,
-                                button.dataset.name
-                            );
+                        openDeleteProduct(
+                            button.dataset.code,
+                            button.dataset.name
+                        );
 
-                        }
-                    );
+                    }
+                );
 
             }
         );
@@ -1899,40 +2097,38 @@ document
     );
 
 
-productModal
-    .addEventListener(
-        'click',
-        event => {
+productModal.addEventListener(
+    'click',
+    event => {
 
-            if (
-                event.target ===
-                productModal
-            ) {
+        if (
+            event.target ===
+            productModal
+        ) {
 
-                closeProductModal();
-
-            }
+            closeProductModal();
 
         }
-    );
+
+    }
+);
 
 
-deleteModal
-    .addEventListener(
-        'click',
-        event => {
+deleteModal.addEventListener(
+    'click',
+    event => {
 
-            if (
-                event.target ===
-                deleteModal
-            ) {
+        if (
+            event.target ===
+            deleteModal
+        ) {
 
-                closeDeleteProduct();
-
-            }
+            closeDeleteProduct();
 
         }
-    );
+
+    }
+);
 
 
 /* =====================================================
