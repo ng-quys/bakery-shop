@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý khuyến mãi</title>
+
+    <link rel="stylesheet" href="../../css/promotions/promotion.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Quản lý khuyến mãi</h1>
+            <p>Thêm, sửa, xóa và quản lý chương trình khuyến mãi</p>
+        </div>
+
+        <button id="btnAdd" class="btn btn-primary">
+            + Thêm khuyến mãi
+        </button>
+    </div>
+
+    <div class="toolbar">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Tìm theo mã hoặc tên..."
+        >
+
+        <select id="statusFilter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Đang hoạt động">Đang hoạt động</option>
+            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+        </select>
+
+        <button id="btnSearch" class="btn">
+            Tìm kiếm
+        </button>
+    </div>
+
+    <div id="message"></div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã KM</th>
+                    <th>Tên</th>
+                    <th>Loại</th>
+                    <th>Giá trị</th>
+                    <th>Thời gian</th>
+                    <th>Số lượng</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody id="promotionTableBody">
+                <tr>
+                    <td colspan="8" class="center">
+                        Đang tải dữ liệu...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="pagination" class="pagination"></div>
+</div>
+
+<!-- MODAL -->
+<div id="promotionModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Thêm khuyến mãi</h2>
+            <button id="btnCloseModal" class="close-btn">×</button>
+        </div>
+
+        <form id="promotionForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Mã khuyến mãi</label>
+                    <input id="MaKM" type="text" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tên khuyến mãi</label>
+                    <input id="TenKM" type="text" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Mô tả</label>
+                    <textarea id="MoTa"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Loại khuyến mãi</label>
+                    <select id="LoaiKM" required>
+                        <option value="Phần trăm">Phần trăm</option>
+                        <option value="Tiền">Tiền</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Giá trị</label>
+                    <input id="GiaTri" type="number" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Giá trị tối đa</label>
+                    <input id="GiaTriToiDa" type="number" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Đơn tối thiểu</label>
+                    <input id="DonToiThieu" type="number" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Phạm vi áp dụng</label>
+                    <select id="PhamViApDung">
+                        <option value="Toàn bộ">Toàn bộ</option>
+                        <option value="Danh mục">Danh mục</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <input
+                        id="DanhMuc"
+                        type="text"
+                        placeholder="DM01,DM02"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Ngày bắt đầu</label>
+                    <input id="NgayBatDau" type="datetime-local" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Ngày kết thúc</label>
+                    <input id="NgayKetThuc" type="datetime-local" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Số lượng</label>
+                    <input id="SoLuong" type="number" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <select id="TrangThai">
+                        <option value="Đang hoạt động">Đang hoạt động</option>
+                        <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button
+                    type="button"
+                    id="btnCancel"
+                    class="btn"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Lưu
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script type="module" src="../../js/promotions/promotion-list.js"></script>
+<script type="module" src="../../js/promotions/promotion-form.js"></script>
+
+</body>
+</html>

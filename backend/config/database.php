@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use MongoDB\Client;
+use Dotenv\Dotenv;
 
 class Database
 {
@@ -13,17 +14,24 @@ class Database
 
     private function __construct()
     {
-        $uri = getenv('MONGODB_URI');
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->safeLoad();
+
+        $uri = $_ENV['MONGODB_URI'] ?? null;
 
         if (!$uri) {
-            throw new Exception('Chưa cấu hình MONGODB_URI');
+            throw new Exception(
+                'Chưa cấu hình MONGODB_URI trong backend/.env'
+            );
         }
+
+        $databaseName =
+            $_ENV['MONGODB_DATABASE'] ?? 'QL_CakeShop';
 
         $this->client = new Client($uri);
 
-        $this->database = $this->client->selectDatabase(
-            getenv('MONGODB_DATABASE') ?: 'QL_CakeShop'
-        );
+        $this->database =
+            $this->client->selectDatabase($databaseName);
     }
 
     public static function getInstance(): Database
