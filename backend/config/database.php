@@ -1,49 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use MongoDB\Client;
 use Dotenv\Dotenv;
+use MongoDB\Client;
+use MongoDB\Database;
 
-class Database
+final class DatabaseConnection
 {
-    private static ?Database $instance = null;
+    private static ?DatabaseConnection $instance = null;
 
     private Client $client;
-    private $database;
+    private Database $database;
 
     private function __construct()
     {
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->safeLoad();
 
-        $uri = $_ENV['MONGODB_URI'] ?? null;
+        $uri = $_ENV['MONGODB_URI'] ?? '';
+        $databaseName = $_ENV['MONGODB_DATABASE'] ?? 'QL_CakeShop';
 
-        if (!$uri) {
-            throw new Exception(
-                'Chưa cấu hình MONGODB_URI trong backend/.env'
-            );
+        if ($uri === '') {
+            throw new RuntimeException('Chưa cấu hình MONGODB_URI trong backend/.env');
         }
-
-        $databaseName =
-            $_ENV['MONGODB_DATABASE'] ?? 'QL_CakeShop';
 
         $this->client = new Client($uri);
-
-        $this->database =
-            $this->client->selectDatabase($databaseName);
+        $this->database = $this->client->selectDatabase($databaseName);
     }
 
-    public static function getInstance(): Database
+    public static function getInstance(): DatabaseConnection
     {
-        if (self::$instance === null) {
-            self::$instance = new Database();
-        }
-
-        return self::$instance;
+        return self::$instance ??= new DatabaseConnection();
     }
 
-    public function getDatabase()
+    public function getDatabase(): Database
     {
         return $this->database;
     }
