@@ -1,0 +1,2067 @@
+/* =========================================
+   THE LITTLE PRINCE PÂTISSERIE
+   AUTH UI
+========================================= */
+
+:root {
+
+    --sage: #98AA9F;
+    --sage-dark: #71877A;
+    --sage-deep: #536A5E;
+    --sage-soft: #DDE4DF;
+
+    --cream: #F7F3EA;
+    --cream-light: #FCFAF5;
+    --ivory: #FFFDF8;
+
+    --charcoal: #2F342F;
+    --text: #343A35;
+    --text-soft: #737A74;
+
+    --border: #D8D8CF;
+
+    --danger: #A94D4D;
+    --success: #567563;
+
+    --serif: "Playfair Display", Georgia, serif;
+    --sans: "Inter", Arial, sans-serif;
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--cream);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    border: none;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.auth-page {
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(500px, 46%)
+        minmax(600px, 54%);
+
+    background: var(--cream);
+}
+
+
+/* =========================================
+   LEFT SHOWCASE
+========================================= */
+
+.auth-showcase {
+    min-height: 100vh;
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+        clamp(38px, 4vw, 65px)
+        clamp(38px, 4.8vw, 76px);
+
+    color: #ffffff;
+
+    /*
+     * auth.css nằm trong page/auth/
+     * nên ../../assets/background.png
+     * sẽ trỏ về frontend/assets/background.png
+     */
+    background-image: url("../../assets/background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Sage overlay */
+
+.showcase-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(74, 94, 82, 0.72) 0%,
+        rgba(91, 111, 99, 0.48) 43%,
+        rgba(91, 111, 99, 0.10) 75%,
+        rgba(91, 111, 99, 0.03) 100%
+    );
+}
+
+
+/* subtle vignette */
+
+.auth-showcase::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(25, 38, 31, .08),
+            transparent 35%,
+            rgba(25, 38, 31, .16)
+        );
+
+    pointer-events: none;
+}
+
+
+/* decorative large circle */
+
+.auth-showcase::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    top: -290px;
+    right: -180px;
+
+    z-index: 2;
+
+    border:
+        1px solid rgba(255, 255, 255, .17);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   BRAND
+========================================= */
+
+.brand {
+    position: relative;
+    z-index: 5;
+
+    display: block;
+
+    width: fit-content;
+
+    text-decoration: none;
+}
+
+.brand-logo-image {
+    display: block;
+
+    width: 245px;
+    height: auto;
+
+    object-fit: contain;
+
+    /*
+     * Nếu logo.png của bạn là logo màu tối
+     * thì filter này biến logo thành trắng
+     * để nổi trên ảnh banner.
+     */
+    filter: brightness(0) invert(1);
+
+    opacity: 0.96;
+}
+
+
+/* MOBILE */
+
+.mobile-brand {
+    display: none;
+}
+
+.mobile-logo-image {
+    display: block;
+
+    width: 220px;
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+.brand-copy strong {
+
+    font-family: var(--serif);
+
+    font-size: 25px;
+    font-weight: 400;
+
+    line-height: 1.05;
+}
+
+
+.brand-copy small {
+
+    margin-top: 7px;
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: 4.5px;
+
+    opacity: .76;
+}
+
+
+/* =========================================
+   SHOWCASE CONTENT
+========================================= */
+
+.showcase-content {
+
+    position: relative;
+    z-index: 5;
+
+    width: min(620px, 100%);
+
+    margin: auto 0;
+
+    padding-bottom: 40px;
+}
+
+
+.showcase-label {
+
+    display: inline-block;
+
+    margin-bottom: 28px;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 5px;
+
+    color: rgba(255, 255, 255, .9);
+}
+
+
+.showcase-content h1 {
+
+    max-width: 580px;
+
+    font-family: var(--serif);
+
+    font-size:
+        clamp(58px, 5.1vw, 86px);
+
+    font-weight: 400;
+
+    line-height: .98;
+
+    letter-spacing: -2.7px;
+
+    text-shadow:
+        0 2px 20px rgba(28, 40, 33, .08);
+}
+
+
+.showcase-content h1 em {
+
+    font-weight: 400;
+    font-style: italic;
+
+    color: #FFFDF6;
+}
+
+
+.showcase-content p {
+
+    max-width: 430px;
+
+    margin-top: 34px;
+
+    font-family: var(--serif);
+
+    font-size: 16px;
+    font-style: italic;
+
+    line-height: 1.75;
+
+    color:
+        rgba(255, 255, 255, .86);
+}
+
+
+/* =========================================
+   SHOWCASE BOTTOM
+========================================= */
+
+.showcase-signature {
+
+    position: relative;
+    z-index: 5;
+
+    width: 160px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 8px;
+}
+
+
+.showcase-signature span {
+
+    height: 1px;
+    flex: 1;
+
+    background:
+        rgba(255, 255, 255, .45);
+}
+
+
+.showcase-signature small {
+
+    font-family: var(--serif);
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    color:
+        rgba(255, 255, 255, .8);
+}
+
+
+/* =========================================
+   RIGHT PANEL
+========================================= */
+
+.auth-panel {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        52px
+        clamp(60px, 7vw, 120px);
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(152, 170, 159, .09),
+            transparent 28%
+        ),
+        var(--cream-light);
+}
+
+
+.auth-container {
+
+    width: min(570px, 100%);
+}
+
+
+.register-container {
+
+    width: min(590px, 100%);
+}
+
+
+/* Mobile logo hidden on desktop */
+
+.mobile-brand {
+    display: none;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.auth-header {
+
+    margin-bottom: 35px;
+}
+
+
+.section-label {
+
+    color: var(--sage-deep);
+
+    font-family: var(--sans);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 4.5px;
+}
+
+
+.auth-header h2 {
+
+    margin-top: 15px;
+
+    font-family: var(--serif);
+
+    font-size:
+        clamp(44px, 3.6vw, 56px);
+
+    font-weight: 400;
+
+    line-height: 1.1;
+
+    letter-spacing: -1.6px;
+
+    color: var(--charcoal);
+}
+
+
+.auth-header p {
+
+    margin-top: 14px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.auth-header a {
+
+    color: var(--charcoal);
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    border-bottom:
+        1px solid #9EA69F;
+}
+
+
+/* =========================================
+   GOOGLE BUTTON
+========================================= */
+
+.google-button {
+
+    width: 100%;
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    color: var(--charcoal);
+
+    background:
+        rgba(255, 255, 255, .55);
+
+    border:
+        1px solid #CACCC5;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.google-button svg {
+
+    width: 22px;
+    height: 22px;
+}
+
+
+.google-button:hover {
+
+    background: white;
+
+    border-color: var(--sage);
+
+    box-shadow:
+        0 8px 25px rgba(47, 52, 47, .07);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin: 28px 0;
+}
+
+
+.divider::before,
+.divider::after {
+
+    content: "";
+
+    height: 1px;
+
+    flex: 1;
+
+    background: #DFDED6;
+}
+
+
+.divider span {
+
+    color: #92968F;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.auth-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--charcoal);
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+.label-row {
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.forgot-password {
+
+    color: var(--charcoal);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+
+.forgot-password:hover {
+
+    text-decoration: underline;
+}
+
+
+/* INPUT */
+
+.form-group input {
+
+    width: 100%;
+    height: 62px;
+
+    padding: 0 18px;
+
+    color: var(--charcoal);
+
+    background:
+        rgba(255, 255, 255, .42);
+
+    border:
+        1px solid #D3D3CB;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.form-group input::placeholder {
+
+    color: #A6AAA4;
+}
+
+
+.form-group input:hover {
+
+    border-color:
+        #B7BEB8;
+}
+
+
+.form-group input:focus {
+
+    background: white;
+
+    border-color:
+        var(--sage-dark);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(152, 170, 159, .13);
+}
+
+
+.form-group.invalid input {
+
+    border-color:
+        var(--danger);
+}
+
+
+/* =========================================
+   PASSWORD
+========================================= */
+
+.password-wrapper {
+
+    position: relative;
+}
+
+
+.password-wrapper input {
+
+    padding-right: 58px;
+}
+
+
+.toggle-password {
+
+    position: absolute;
+
+    top: 50%;
+    right: 14px;
+
+    transform:
+        translateY(-50%);
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+
+    place-items: center;
+
+    color: #667069;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.eye-icon {
+
+    width: 21px;
+    height: 21px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.error-message {
+
+    display: block;
+
+    min-height: 4px;
+
+    margin-top: 5px;
+
+    color: var(--danger);
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   CHECKBOX
+========================================= */
+
+.remember {
+
+    width: fit-content;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    cursor: pointer;
+}
+
+
+.remember input {
+
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    accent-color:
+        var(--sage-deep);
+}
+
+
+.agreement {
+
+    align-items: flex-start;
+}
+
+
+.agreement a {
+
+    color:
+        var(--sage-deep);
+}
+
+
+/* =========================================
+   MAIN BUTTON
+========================================= */
+
+.primary-button {
+
+    width: 100%;
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 24px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #71887B,
+            #526B5E
+        );
+
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+.primary-button:hover {
+
+    background:
+        var(--sage-deep);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(83, 106, 94, .2);
+}
+
+
+.primary-button:active {
+
+    transform:
+        translateY(0);
+}
+
+
+.primary-button:disabled {
+
+    opacity: .65;
+
+    cursor: wait;
+}
+
+
+.button-arrow {
+
+    font-family: var(--serif);
+
+    font-size: 25px;
+
+    font-weight: 400;
+}
+
+
+/* =========================================
+   FORM MESSAGE
+========================================= */
+
+.form-message {
+
+    display: none;
+
+    padding: 13px 15px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+.form-message.error {
+
+    display: block;
+
+    color: #8E4242;
+
+    background: #F9EDEC;
+
+    border:
+        1px solid #E9C8C5;
+}
+
+
+.form-message.success {
+
+    display: block;
+
+    color: #456554;
+
+    background: #EAF1EC;
+
+    border:
+        1px solid #C8D8CE;
+}
+
+
+/* =========================================
+   TERMS
+========================================= */
+
+.terms {
+
+    max-width: 480px;
+
+    margin:
+        28px auto 0;
+
+    color: #999C96;
+
+    font-size: 10px;
+
+    line-height: 1.8;
+
+    text-align: center;
+}
+
+
+.terms a {
+
+    color: #6C736E;
+}
+
+
+/* =========================================
+   REGISTER
+========================================= */
+
+.register-container .auth-header {
+
+    margin-bottom: 25px;
+}
+
+
+.register-container .divider {
+
+    margin: 20px 0;
+}
+
+
+.register-container .auth-form {
+
+    gap: 13px;
+}
+
+
+.register-container .form-group input {
+
+    height: 57px;
+}
+
+
+.register-container .primary-button {
+
+    height: 59px;
+}
+
+
+/* =========================================
+   RESPONSIVE - LAPTOP
+========================================= */
+
+/* =========================================
+   THE LITTLE PRINCE PÂTISSERIE
+   LOGIN PAGE
+========================================= */
+
+:root {
+    --sage: #98AA9F;
+    --sage-dark: #71877A;
+    --sage-deep: #536A5E;
+
+    --cream: #F7F3EA;
+    --cream-light: #FCFAF5;
+
+    --charcoal: #2F342F;
+    --text: #343A35;
+    --text-soft: #737A74;
+
+    --border: #D4D5CE;
+
+    --danger: #A94D4D;
+    --success: #567563;
+
+    --serif: "Playfair Display", Georgia, serif;
+    --sans: "Inter", Arial, sans-serif;
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--cream);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    border: none;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.auth-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+
+    /*
+        Hình mẫu gần 50 / 50
+    */
+    grid-template-columns: 46% 54%;
+}
+
+
+/* =========================================
+   LEFT BANNER
+========================================= */
+
+.auth-showcase {
+    position: relative;
+
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 55px 64px 55px;
+
+    color: white;
+
+    /*
+        QUAN TRỌNG:
+        dùng nguyên ảnh làm background full panel.
+
+        Không còn cái rectangle ảnh bánh
+        như bản hiện tại nữa.
+    */
+    background-image:
+        url("../../assets/background.png");
+
+    background-repeat: no-repeat;
+
+    background-size: cover;
+
+    /*
+        Hình mẫu tập trung bánh lớn về bên phải.
+    */
+    background-position: 58% center;
+}
+
+
+/* =========================================
+   SAGE FILTER
+
+   Chỉ phủ RẤT NHẸ để giữ màu sage.
+   Không làm ảnh bị xám đục.
+========================================= */
+
+.showcase-overlay {
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(111, 139, 124, 0.32) 0%,
+            rgba(120, 145, 132, 0.20) 45%,
+            rgba(112, 137, 123, 0.08) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   DECORATIVE CIRCLE
+========================================= */
+
+.auth-showcase::after {
+    content: "";
+
+    position: absolute;
+
+    width: 620px;
+    height: 620px;
+
+    top: -385px;
+    right: -230px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.32);
+
+    border-radius: 50%;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.brand {
+    position: relative;
+    z-index: 5;
+
+    /*
+        Logo chính giữa
+    */
+    align-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    text-decoration: none;
+}
+
+
+.brand-logo-image {
+    display: block;
+
+    /*
+        Nhỏ hơn bản screenshot hiện tại
+    */
+    width: 205px;
+
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        brightness(0)
+        invert(1);
+
+    opacity: 0.97;
+}
+
+
+/* =========================================
+   LEFT TEXT
+========================================= */
+
+.showcase-content {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+
+    margin-top: auto;
+    margin-bottom: auto;
+
+    transform: translateY(35px);
+}
+
+
+.showcase-label {
+    display: block;
+
+    margin-bottom: 38px;
+
+    font-family: var(--sans);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    letter-spacing: 6px;
+
+    color: rgba(255, 255, 255, 0.94);
+}
+
+
+.showcase-content h1 {
+    font-family: var(--serif);
+
+    font-size:
+        clamp(66px, 5.3vw, 96px);
+
+    font-weight: 400;
+
+    line-height: 0.98;
+
+    letter-spacing: -3px;
+
+    color: #FFFDF8;
+
+    text-shadow:
+        0 2px 20px rgba(31, 46, 38, 0.06);
+}
+
+
+.showcase-content h1 em {
+    font-weight: 400;
+    font-style: italic;
+
+    color: #FFFDF8;
+}
+
+
+.showcase-content p {
+    margin-top: 42px;
+
+    max-width: 500px;
+
+    font-family: var(--serif);
+
+    font-size: 18px;
+    font-style: italic;
+
+    line-height: 1.7;
+
+    color:
+        rgba(255, 255, 255, 0.92);
+}
+
+
+/* =========================================
+   BOTTOM L.P
+========================================= */
+
+.showcase-signature {
+    position: relative;
+    z-index: 5;
+
+    width: 175px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+}
+
+
+.showcase-signature span {
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        rgba(255, 255, 255, 0.7);
+}
+
+
+.showcase-signature small {
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    color:
+        rgba(255, 255, 255, 0.95);
+}
+
+
+/* =========================================
+   RIGHT PANEL
+========================================= */
+
+.auth-panel {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 60px 85px;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 255, 255, 0.85),
+            rgba(247, 243, 234, 0.55) 55%,
+            rgba(247, 243, 234, 1) 100%
+        ),
+        var(--cream);
+}
+
+
+.auth-container {
+    /*
+        Không kéo form full màn hình như screenshot xấu.
+    */
+    width: min(590px, 100%);
+}
+
+
+/* =========================================
+   MOBILE BRAND
+========================================= */
+
+.mobile-brand {
+    display: none;
+}
+
+
+.mobile-logo-image {
+    width: 190px;
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.auth-header {
+    margin-bottom: 38px;
+}
+
+
+.section-label {
+    display: block;
+
+    color: #496057;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 14px;
+}
+
+
+.auth-header h2 {
+    font-family: var(--serif);
+
+    font-size:
+        clamp(48px, 4vw, 64px);
+
+    font-weight: 400;
+
+    line-height: 1.08;
+
+    letter-spacing: -2px;
+
+    color: #26332F;
+}
+
+
+.auth-header p {
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: #59635D;
+
+    font-size: 16px;
+}
+
+
+.auth-header a {
+    color: #36463F;
+
+    text-decoration: none;
+
+    border-bottom:
+        1px solid #69776F;
+}
+
+
+/* =========================================
+   GOOGLE BUTTON
+========================================= */
+
+.google-button {
+    width: 100%;
+    height: 72px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 17px;
+
+    background:
+        rgba(255, 255, 255, 0.3);
+
+    border:
+        1px solid #AEB5B0;
+
+    border-radius: 10px;
+
+    color: #273530;
+
+    font-size: 17px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.google-button svg {
+    width: 29px;
+    height: 29px;
+}
+
+
+.google-button:hover {
+    background: white;
+
+    border-color: #87978E;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    margin: 37px 0;
+}
+
+
+.divider::before,
+.divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: #CDD0CB;
+}
+
+
+.divider span {
+    color: #59635D;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.auth-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 27px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 11px;
+
+    color: #283630;
+
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+.label-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.forgot-password {
+    color: #45574F;
+
+    font-size: 14px;
+
+    text-decoration: none;
+}
+
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.form-group input {
+    width: 100%;
+    height: 66px;
+
+    padding: 0 21px;
+
+    color: #293630;
+
+    background:
+        rgba(255, 255, 255, 0.30);
+
+    border:
+        1px solid #BFC4BF;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    font-size: 16px;
+
+    transition: 0.2s ease;
+}
+
+
+.form-group input::placeholder {
+    color: #969E99;
+}
+
+
+.form-group input:hover {
+    border-color: #98A49D;
+}
+
+
+.form-group input:focus {
+    /*
+        Không còn màu xanh browser xấu
+    */
+    background:
+        rgba(255, 255, 255, 0.65);
+
+    border-color: #71877A;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(113, 135, 122, 0.09);
+}
+
+
+/* =========================================
+   PASSWORD
+========================================= */
+
+.password-wrapper {
+    position: relative;
+}
+
+
+.password-wrapper input {
+    padding-right: 62px;
+}
+
+
+.toggle-password {
+    position: absolute;
+
+    right: 16px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+
+    place-items: center;
+
+    background: transparent;
+
+    color: #6C7A73;
+
+    cursor: pointer;
+}
+
+
+.eye-icon {
+    width: 24px;
+    height: 24px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.error-message {
+    display: block;
+
+    min-height: 2px;
+
+    margin-top: 5px;
+
+    color: var(--danger);
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   REMEMBER
+========================================= */
+
+.remember {
+    width: fit-content;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    color: #46554E;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.remember input {
+    appearance: none;
+
+    width: 25px;
+    height: 25px;
+
+    border:
+        1.5px solid #52675E;
+
+    border-radius: 5px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    position: relative;
+}
+
+
+.remember input:checked {
+    background: #536A5E;
+}
+
+
+.remember input:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
+.primary-button {
+    width: 100%;
+    height: 80px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #657E70,
+            #405C4F
+        );
+
+    color: white;
+
+    border-radius: 9px;
+
+    font-family: var(--serif);
+
+    font-size: 20px;
+    font-weight: 400;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.primary-button:hover {
+    background: #486355;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 28px
+        rgba(66, 91, 78, 0.17);
+}
+
+
+.button-arrow {
+    font-family: var(--serif);
+
+    font-size: 28px;
+    font-weight: 300;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.form-message {
+    display: none;
+
+    padding: 13px 15px;
+
+    border-radius: 6px;
+
+    font-size: 13px;
+}
+
+
+.form-message.error {
+    display: block;
+
+    color: #8E4242;
+
+    background: #F9EDEC;
+
+    border:
+        1px solid #E9C8C5;
+}
+
+
+.form-message.success {
+    display: block;
+
+    color: #456554;
+
+    background: #EAF1EC;
+
+    border:
+        1px solid #C8D8CE;
+}
+
+
+/* =========================================
+   TERMS
+========================================= */
+
+.terms {
+    margin-top: 46px;
+
+    color: #7F8983;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    text-align: center;
+}
+
+
+.terms a {
+    color: #5C6962;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+
+    .auth-page {
+        grid-template-columns:
+            45% 55%;
+    }
+
+    .auth-showcase {
+        padding:
+            45px 45px 50px;
+
+        background-position:
+            58% center;
+    }
+
+    .brand-logo-image {
+        width: 185px;
+    }
+
+    .showcase-content h1 {
+        font-size: 65px;
+    }
+
+    .auth-panel {
+        padding:
+            50px 60px;
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .auth-page {
+        display: block;
+    }
+
+    .auth-showcase {
+        display: none;
+    }
+
+    .auth-panel {
+        min-height: 100vh;
+
+        padding:
+            40px 28px 55px;
+    }
+
+    .auth-container {
+        width:
+            min(590px, 100%);
+    }
+
+    .mobile-brand {
+        display: flex;
+
+        justify-content: center;
+
+        margin-bottom: 45px;
+
+        text-decoration: none;
+    }
+
+    .mobile-logo-image {
+        width: 180px;
+    }
+
+    .auth-header {
+        text-align: center;
+    }
+
+    .auth-header h2 {
+        font-size: 48px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .auth-panel {
+        padding:
+            30px 20px 45px;
+    }
+
+    .auth-header h2 {
+        font-size: 39px;
+    }
+
+    .google-button {
+        height: 62px;
+
+        font-size: 15px;
+    }
+
+    .form-group input {
+        height: 61px;
+    }
+
+    .primary-button {
+        height: 68px;
+    }
+
+    .divider {
+        gap: 13px;
+    }
+
+    .divider span {
+        font-size: 11px;
+    }
+
+    .terms {
+        margin-top: 35px;
+    }
+}
+/* =========================================
+   GOOGLE SIGN IN
+========================================= */
+
+.google-auth-wrapper {
+    width: 100%;
+    min-height: 44px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 8px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/*
+ * Element Google render vào
+ */
+#googleLoginButton,
+#googleRegisterButton {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+
+/*
+ * Google tạo một div bao ngoài iframe
+ */
+#googleLoginButton > div,
+#googleRegisterButton > div {
+    width: 100% !important;
+}
+
+
+/*
+ * Chỉ tác động kích thước iframe,
+ * không phá UI bên trong của Google.
+ */
+#googleLoginButton iframe,
+#googleRegisterButton iframe {
+    width: 100% !important;
+    max-width: 570px !important;
+}
+
+
+.google-auth-wrapper:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 24px
+        rgba(66, 91, 78, 0.08);
+}
+
+
+.google-auth-wrapper:active {
+    transform: translateY(0);
+}
+
+
+/* REGISTER */
+.register-container .google-auth-wrapper {
+    margin-top: 2px;
+}
+
+
+/* MOBILE */
+@media (max-width: 850px) {
+
+    #googleLoginButton iframe,
+    #googleRegisterButton iframe {
+        max-width: 100% !important;
+    }
+}

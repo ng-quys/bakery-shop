@@ -3,40 +3,30 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use MongoDB\Client;
+use Dotenv\Dotenv;
 
 class Database
 {
-    private static ?Database $instance = null;
+    private static ?Client $client = null;
 
-    private Client $client;
-    private $database;
-
-    private function __construct()
+    public static function getDatabase()
     {
-        $uri = getenv('MONGODB_URI');
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+        $dotenv->safeLoad();
 
-        if (!$uri) {
-            throw new Exception('Chưa cấu hình MONGODB_URI');
+        $uri = $_ENV['MONGODB_URI'] ?? null;
+        $databaseName = $_ENV['MONGODB_DATABASE'] ?? null;
+
+        if (!$uri || !$databaseName) {
+            throw new Exception(
+                'MongoDB configuration is missing.'
+            );
         }
 
-        $this->client = new Client($uri);
-
-        $this->database = $this->client->selectDatabase(
-            getenv('MONGODB_DATABASE') ?: 'QL_CakeShop'
-        );
-    }
-
-    public static function getInstance(): Database
-    {
-        if (self::$instance === null) {
-            self::$instance = new Database();
+        if (self::$client === null) {
+            self::$client = new Client($uri);
         }
 
-        return self::$instance;
-    }
-
-    public function getDatabase()
-    {
-        return $this->database;
+        return self::$client->selectDatabase($databaseName);
     }
 }
