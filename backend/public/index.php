@@ -1,32 +1,29 @@
 <?php
+declare(strict_types=1);
 
-header(
-    'Access-Control-Allow-Origin: *'
-);
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../routes/Router.php';
 
-header(
-    'Access-Control-Allow-Headers: Content-Type, Authorization'
-);
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
-header(
-    'Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'
-);
-
-if (
-    $_SERVER['REQUEST_METHOD'] ===
-    'OPTIONS'
-) {
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
 
-require_once __DIR__
-    . '/../app/Helpers/Response.php';
+$router = new Router();
 
-require_once __DIR__
-    . '/../routes/admin.php';
+require_once __DIR__ . '/../routes/admin.php';
+require_once __DIR__ . '/../routes/client.php';
 
-Response::error(
-    'API không tồn tại',
-    404
+$uri = parse_url(
+    $_SERVER['REQUEST_URI'],
+    PHP_URL_PATH
+) ?: '/';
+
+$router->dispatch(
+    $_SERVER['REQUEST_METHOD'],
+    $uri
 );

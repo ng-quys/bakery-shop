@@ -1,71 +1,151 @@
 <?php
 
-require_once __DIR__
-    . '/../app/Controllers/Admin/PromotionController.php';
+declare(strict_types=1);
 
-$controller =
-    new PromotionController();
+use Admin\Controllers\CartController;
+use Admin\Controllers\CategoryController;
+use Admin\Controllers\CustomerController;
+use Admin\Controllers\DashboardController;
+use Admin\Controllers\EmployeeController;
+use Admin\Controllers\FavoriteController;
+use Admin\Controllers\OrderController;
+use Admin\Controllers\ProductController;
+use Admin\Controllers\PromotionController;
 
-$method =
-    $_SERVER['REQUEST_METHOD'];
 
-$uri =
-    parse_url(
-        $_SERVER['REQUEST_URI'],
-        PHP_URL_PATH
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+$router->get(
+    '/api/admin/dashboard',
+    [
+        DashboardController::class,
+        'index'
+    ]
+);
+
+$router->get(
+    '/api/admin/dashboard/revenue',
+    [
+        DashboardController::class,
+        'revenue'
+    ]
+);
+
+
+/* =====================================================
+   PRODUCT UPLOAD UPDATE
+===================================================== */
+
+/*
+ * Riêng sản phẩm:
+ *
+ * Khi update có upload file,
+ * frontend gửi multipart/form-data bằng POST
+ *
+ * POST /api/admin/products/{code}
+ */
+$router->post(
+    '/api/admin/products/{code}',
+    [
+        ProductController::class,
+        'update'
+    ]
+);
+
+
+/* =====================================================
+   CRUD MODULES
+===================================================== */
+
+$modules = [
+
+    '/api/admin/products' =>
+        ProductController::class,
+
+    '/api/admin/categories' =>
+        CategoryController::class,
+
+    '/api/admin/orders' =>
+        OrderController::class,
+
+    '/api/admin/customers' =>
+        CustomerController::class,
+
+    '/api/admin/employees' =>
+        EmployeeController::class,
+
+    '/api/admin/promotions' =>
+        PromotionController::class,
+
+    '/api/admin/carts' =>
+        CartController::class,
+
+    '/api/admin/favorites' =>
+        FavoriteController::class
+
+];
+
+
+foreach (
+    $modules
+    as $base => $controller
+) {
+
+    /* LIST */
+    $router->get(
+        $base,
+        [
+            $controller,
+            'index'
+        ]
     );
 
-$uri =
-    rtrim($uri, '/');
 
-if (
-    $uri ===
-    '/api/admin/promotions'
-) {
-    switch ($method) {
-        case 'GET':
-            $controller->index();
-            break;
+    /* DETAIL */
+    $router->get(
+        $base . '/{code}',
+        [
+            $controller,
+            'show'
+        ]
+    );
 
-        case 'POST':
-            $controller->store();
-            break;
 
-        default:
-            Response::error(
-                'Method không được hỗ trợ',
-                405
-            );
-    }
-}
+    /* CREATE */
+    $router->post(
+        $base,
+        [
+            $controller,
+            'store'
+        ]
+    );
 
-if (
-    preg_match(
-        '#^/api/admin/promotions/([^/]+)$#',
-        $uri,
-        $matches
-    )
-) {
-    $maKM =
-        urldecode($matches[1]);
 
-    switch ($method) {
-        case 'GET':
-            $controller->show($maKM);
-            break;
+    /*
+     * UPDATE chuẩn JSON.
+     *
+     * Vẫn giữ PUT để các module khác:
+     * category, employee, promotion...
+     * hoạt động như cũ.
+     */
+    $router->put(
+        $base . '/{code}',
+        [
+            $controller,
+            'update'
+        ]
+    );
 
-        case 'PUT':
-            $controller->update($maKM);
-            break;
 
-        case 'DELETE':
-            $controller->destroy($maKM);
-            break;
+    /* DELETE */
+    $router->delete(
+        $base . '/{code}',
+        [
+            $controller,
+            'destroy'
+        ]
+    );
 
-        default:
-            Response::error(
-                'Method không được hỗ trợ',
-                405
-            );
-    }
 }
