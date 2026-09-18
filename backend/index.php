@@ -1,8 +1,18 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
+
+header('Content-Type: application/json; charset=utf-8');
+
+$path = parse_url(
+    $_SERVER['REQUEST_URI'],
+    PHP_URL_PATH
+);
+
+if (str_contains($path, '/auth/')) {
+    require __DIR__ . '/routes/auth.php';
+    exit;
+}
 
 echo json_encode([
-    "status" => "success",
-    "message" => "Backend PHP API connected successfully!"
-]);
+    'success' => true,
+    'message' => 'Sweet Bakery API is running.'
+], JSON_UNESCAPED_UNICODE);
